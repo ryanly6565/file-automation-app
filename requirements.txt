@@ -1,0 +1,3 @@
+PySide6
+watchdog
+send2trash
