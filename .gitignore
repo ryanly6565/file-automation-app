@@ -14,6 +14,6 @@ dist-linux/
 
 sandbox/
 
-config/
-history/
-logs/
+/config/
+/history/
+/logs/
