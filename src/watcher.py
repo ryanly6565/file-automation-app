@@ -36,46 +36,67 @@ class WatcherHandler(FileSystemEventHandler):
     def process_path(self, path: Path):
         self.prune_recently_processed()
 
+        matching_rule = None
+        for rule in self.rules:
+            if rule_applies(rule, path):
+                matching_rule = rule
+                break
+            
+        if matching_rule is None:
+            return
+
+
         if not self.claim_path(path):
             return
         
-        for rule in self.rules:
-            applies = rule_applies(rule, path)
+        self.logger.info(
+            'Rule: "%s" matches "%s".',
+            matching_rule.name,
+            path
+        )
 
-            if applies:
-                self.logger.info("Rule: \"%s\" matches \"%s\".", rule.name, path)
-                try:
-                    result = rule.execute(path, on_action_complete=self.mark_result)
+        try:
+            result = matching_rule.execute(path, on_action_complete=self.mark_result)
+            self.mark_processed(result.current_path)
+            for generated_path in result.generated_paths:
+                self.mark_processed(generated_path)
 
-                    self.mark_processed(result.current_path)
-                    for generated_path in result.generated_paths:
-                        self.mark_processed(generated_path)
+        except Exception as e:
+            self.logger.exception(
+                'Failed to execute rule: "%s" on %s.',
+                matching_rule.name,
+                path
+            )
 
-                except Exception as e:
-                    self.logger.exception("Failed to execute rule: \"%s\" on %s.", rule.name, path)
-                    self.history.add(
-                        HistoryEntry(
-                            timestamp=datetime.datetime.now(),
-                            rule_name=rule.name,
-                            original_path=path,
-                            final_path=None,
-                            success=False,
-                            error=str(e),
-                        )
-                    )
-                else:
-                    self.logger.info('Rule "%s" executed successfully | input="%s" | final="%s"', rule.name, path, result.current_path)
-                    self.history.add(
-                        HistoryEntry(
-                            timestamp=datetime.datetime.now(),
-                            rule_name=rule.name,
-                            original_path=path,
-                            final_path=result.current_path,
-                            success=True,
-                            error=None,
-                        )
-                    )
-                break       # each file can only be applied one rule in the current directory
+            self.history.add(
+                HistoryEntry(
+                    timestamp=datetime.datetime.now(),
+                    rule_name=matching_rule.name,
+                    original_path=path,
+                    final_path=None,
+                    success=False,
+                    error=str(e),
+                )
+            )
+
+        else:
+            self.logger.info(
+                'Rule "%s" executed successfully | input="%s" | final="%s"',
+                matching_rule.name,
+                path,
+                result.current_path
+            )
+
+            self.history.add(
+                HistoryEntry(
+                    timestamp=datetime.datetime.now(),
+                    rule_name=matching_rule.name,
+                    original_path=path,
+                    final_path=result.current_path,
+                    success=True,
+                    error=None,
+                )
+            )
 
     def mark_processed(self, path: Path) -> None:
         """Marks a path as being recently processed."""

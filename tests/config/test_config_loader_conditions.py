@@ -9,7 +9,7 @@ class TestConditionsConfigLoader:
         condition_data = {}
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_wrong_typed_condition_type(self):
         """Verify an error is thrown when trying to read a condition missing a type"""
@@ -18,7 +18,7 @@ class TestConditionsConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
 class TestExtensionConditionConfigLoader:
     def test_extension_condition_created(self):
@@ -28,7 +28,7 @@ class TestExtensionConditionConfigLoader:
             "value": ".txt"
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, ExtensionCondition)
         assert condition.matches(Path("notes.txt"))
 
@@ -39,7 +39,7 @@ class TestExtensionConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_extension_condition_wrong_value_type(self):
         """Verify an error is thrown when trying to read an extension condition with a wrongly typed value"""
@@ -49,7 +49,7 @@ class TestExtensionConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
 class TestNameContainsConditionConfigLoader:
     def test_name_contains_condition_created(self):
@@ -59,7 +59,7 @@ class TestNameContainsConditionConfigLoader:
             "value": "notes"
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, NameContainsCondition)
         assert condition.matches(Path("notes.txt"))
 
@@ -70,7 +70,7 @@ class TestNameContainsConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_name_contains_condition_wrong_value_type(self):
         """Verify an error is thrown when trying to read a name contains condition with a wrongly typed value"""
@@ -80,7 +80,7 @@ class TestNameContainsConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_name_contains_condition_wrong_case_sensitive_type(self):
         """Verify a name contains condition can be created with only a bool type case_sensitive value"""
@@ -91,7 +91,7 @@ class TestNameContainsConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
 class TestNameStartsWithConditionConfigLoader:
     def test_name_starts_with_condition_created(self):
@@ -103,7 +103,7 @@ class TestNameStartsWithConditionConfigLoader:
             "include_extension": False
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, NameStartsWithCondition)
         assert condition.matches(Path("notes123.txt"))
 
@@ -116,7 +116,7 @@ class TestNameStartsWithConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_name_starts_with_condition_wrong_value_type(self):
         """Verify an error is thrown when trying to read a name starts withcondition with a wrongly typed value"""
@@ -128,7 +128,7 @@ class TestNameStartsWithConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_name_starts_with_condition_wrong_case_sensitive_type(self):
         """Verify a name starts with condition can be created with only a bool case_sensitive value"""
@@ -140,7 +140,7 @@ class TestNameStartsWithConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_name_starts_with_condition_wrong_include_extension_type(self):
         """Verify a name starts with condition can be created with only a bool case_sensitive value"""
@@ -152,7 +152,7 @@ class TestNameStartsWithConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
 class TestNameEndsWithConditionConfigLoader:
     def test_name_ends_with_condition_created(self):
@@ -164,7 +164,7 @@ class TestNameEndsWithConditionConfigLoader:
             "include_extension": False
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, NameEndsWithCondition)
         assert condition.matches(Path("notes.txt"))
 
@@ -177,7 +177,7 @@ class TestNameEndsWithConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_name_ends_with_condition_wrong_value_type(self):
         """Verify an error is thrown when trying to read a name ends with condition with a wrongly typed value"""
@@ -189,7 +189,7 @@ class TestNameEndsWithConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_name_ends_with_condition_wrong_case_sensitive_type(self):
         """Verify a name ends with condition can be created with only a bool case_sensitive value"""
@@ -201,7 +201,7 @@ class TestNameEndsWithConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_name_ends_with_condition_wrong_include_extension_type(self):
         """Verify a name ends with condition can be created with only a bool case_sensitive value"""
@@ -213,7 +213,7 @@ class TestNameEndsWithConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
 class TestExactNameConditionConfigLoader:
     def test_exact_name_condition_created(self):
@@ -225,7 +225,7 @@ class TestExactNameConditionConfigLoader:
             "include_extension": False
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, ExactNameCondition)
         assert condition.matches(Path("notes.txt"))
 
@@ -238,7 +238,7 @@ class TestExactNameConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_exact_name_with_condition_wrong_value_type(self):
         """Verify an error is thrown when trying to read an exact name condition with a wrongly typed value"""
@@ -250,7 +250,7 @@ class TestExactNameConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_exact_name_with_condition_wrong_case_sensitive_type(self):
         """Verify an exact name condition can be created with only a bool case_sensitive value"""
@@ -262,7 +262,7 @@ class TestExactNameConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_exact_name_with_condition_wrong_include_extension_type(self):
         """Verify an exact name with condition can be created with only a bool case_sensitive value"""
@@ -274,7 +274,7 @@ class TestExactNameConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
 class TestAndContainsConditionConfigLoader:
     def test_and_condition_created_two_conditions(self):
@@ -293,7 +293,7 @@ class TestAndContainsConditionConfigLoader:
             ]
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, AndCondition)
         assert condition.matches(Path("notes.txt"))
 
@@ -309,7 +309,7 @@ class TestAndContainsConditionConfigLoader:
             ]
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, AndCondition)
         assert condition.matches(Path("report.txt"))
         assert not condition.matches(Path("report.md"))
@@ -322,7 +322,7 @@ class TestAndContainsConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_and_condition_missing_value(self):
         """Verify an error is thrown when trying to read an and condition missing conditions"""
@@ -331,7 +331,7 @@ class TestAndContainsConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_and_condition_wrong_value_type(self):
         """Verify an error is thrown when trying to read an and condition with a wrongly typed conditions field"""
@@ -341,7 +341,7 @@ class TestAndContainsConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
 class TestOrConditionConfigLoader:
     def test_or_condition_created_two_conditions(self):
@@ -360,7 +360,7 @@ class TestOrConditionConfigLoader:
             ]
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, OrCondition)
         assert condition.matches(Path("notes.md"))
 
@@ -376,7 +376,7 @@ class TestOrConditionConfigLoader:
             ]
         }
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, OrCondition)
         assert condition.matches(Path("report.txt"))
         assert not condition.matches(Path("report.md"))
@@ -389,7 +389,7 @@ class TestOrConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_or_condition_missing_value(self):
         """Verify an error is thrown when trying to read an or condition missing conditions"""
@@ -398,7 +398,7 @@ class TestOrConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_or_condition_wrong_value_type(self):
         """Verify an error is thrown when trying to read an or condition with a wrongly typed conditions field"""
@@ -408,7 +408,7 @@ class TestOrConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
 class TestSizeConditionConfigLoader:
     def test_size_condition_created(self, tmp_path):
@@ -422,7 +422,7 @@ class TestSizeConditionConfigLoader:
         file = tmp_path / "notes.txt"
         file.write_bytes(b"x" * 11)
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, SizeCondition)
         assert condition.matches(file)
 
@@ -436,7 +436,7 @@ class TestSizeConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_size_condition_no_size(self):
         """Verify a size condition cannot be created with a wrongly typed value for size."""
@@ -446,7 +446,7 @@ class TestSizeConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_size_condition_wrong_value_type(self):
         """Verify an error is thrown when trying to read an and condition with a wrongly typed conditions field"""
@@ -456,7 +456,7 @@ class TestSizeConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_size_condition_explicit_greater_than(self, tmp_path):
         """Verify a size condition can be created with a correct typed but explicit greater_than."""
@@ -468,7 +468,7 @@ class TestSizeConditionConfigLoader:
 
         file = tmp_path / "notes.txt"
 
-        condition = make_condition_from_json(condition_data)
+        condition = make_condition_from_json(condition_data, "test_rule")
         assert isinstance(condition, SizeCondition)
 
         file.write_bytes(b"x" * 9)
@@ -486,7 +486,7 @@ class TestSizeConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")
 
     def test_size_condition_wrongly_typed_inclusive(self, tmp_path):
         """Verify a size condition cannot be created with a wrongly typed value for inclusive."""
@@ -497,4 +497,4 @@ class TestSizeConditionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_condition_from_json(condition_data)
+            make_condition_from_json(condition_data, "test_rule")

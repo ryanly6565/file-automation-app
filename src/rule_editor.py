@@ -112,7 +112,7 @@ class RuleEditorDialog(QDialog):
             self.folder_input.setText(folder)
 
     def save_rule(self):
-        """ Handler for pressing the save button, validates input and"""
+        """ Handler for pressing the save button, validates input and saves rules."""
         if not self.name_input.text().strip():
             QMessageBox.warning(
                 self,

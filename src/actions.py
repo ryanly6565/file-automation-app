@@ -6,6 +6,7 @@ from src.logger import get_logger
 from dataclasses import dataclass
 import send2trash
 import zipfile
+import sys
 
 SUPPORTED_SCRIPT_TYPES = {
     "python": (".py",),
@@ -209,7 +210,11 @@ class ExecuteScriptAction(Action):
                 command = ["node", str(self.script), str(path)]
 
             case "powershell":
-                command = ["pwsh", str(self.script), str(path)]
+                if sys.platform == "win32":
+                    interpreter = "powershell.exe"
+                else:
+                    interpreter = "pwsh"
+                command = [interpreter, str(self.script), str(path)]
 
             case _:
                 raise ValueError(

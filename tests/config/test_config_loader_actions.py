@@ -9,7 +9,7 @@ class TestActionConfigLoader:
         actions_data = {}
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_wrong_typed_condition_type(self):
         """Verify an error is thrown when trying to read a condition missing a type"""
@@ -18,7 +18,7 @@ class TestActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
 class TestMoveActionConfigLoader:
     def test_move_action_created(self, tmp_path):
@@ -35,7 +35,7 @@ class TestMoveActionConfigLoader:
             "destination": str(dst_dir)
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         result = actions[0].execute(Path(file))
         assert not file.exists()
         assert (dst_dir / "test.txt").exists()
@@ -48,7 +48,7 @@ class TestMoveActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_move_action_wrong_value_dst(self):
         """Verify an error is thrown when trying to read a move action with a wrongly typed destination"""
@@ -58,7 +58,7 @@ class TestMoveActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
 class TestCopyActionConfigLoader:
     def test_copy_action_created(self, tmp_path):
@@ -75,7 +75,7 @@ class TestCopyActionConfigLoader:
             "destination": str(dst_dir)
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         result = actions[0].execute(Path(file))
         assert file.exists()
         assert (dst_dir / "test.txt").exists()
@@ -88,7 +88,7 @@ class TestCopyActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_copy_action_wrong_value_dst(self):
         """Verify an error is thrown when trying to read a copy action with a wrongly typed destination"""
@@ -98,7 +98,7 @@ class TestCopyActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
 class TestPrefixRenameActionConfigLoader:
     def test_prefix_rename_action_created(self, tmp_path):
@@ -113,7 +113,7 @@ class TestPrefixRenameActionConfigLoader:
             "value": "new_"
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         result = actions[0].execute(Path(file))
         assert not file.exists()
         assert (source_dir / "new_test.txt").exists()
@@ -126,7 +126,7 @@ class TestPrefixRenameActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_prefix_rename_action_wrong_value_type(self):
         """Verify an error is thrown when trying to read a prefix rename action with a wrongly typed destination"""
@@ -136,7 +136,7 @@ class TestPrefixRenameActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
 class TestSuffixRenameActionConfigLoader:
     def test_suffix_rename_action_created(self, tmp_path):
@@ -151,7 +151,7 @@ class TestSuffixRenameActionConfigLoader:
             "value": "_finished"
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         result = actions[0].execute(Path(file))
         assert not file.exists()
         assert (source_dir / "test_finished.txt").exists()
@@ -164,7 +164,7 @@ class TestSuffixRenameActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_suffix_rename_action_wrong_value_type(self):
         """Verify an error is thrown when trying to read a suffix rename action with a wrongly typed destination"""
@@ -174,7 +174,7 @@ class TestSuffixRenameActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
 class TestReplaceTextActionConfigLoader:
     def test_replace_text_action_created(self, tmp_path):
@@ -191,7 +191,7 @@ class TestReplaceTextActionConfigLoader:
             "first_instance_only": False,
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         result = actions[0].execute(Path(file))
         assert not file.exists()
         assert (source_dir / "report_report.txt").exists()
@@ -206,7 +206,7 @@ class TestReplaceTextActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_replace_text_action_missing_new_str(self):
         """Verify an error is thrown when trying to read a replace text action missing a new_str"""
@@ -217,7 +217,7 @@ class TestReplaceTextActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_replace_text_action_missing_first_instance_only_allowed(self, tmp_path):
         """Verify a replace text action can successfully be created even without a first_instance_only"""
@@ -232,7 +232,7 @@ class TestReplaceTextActionConfigLoader:
             "new_str": "report",
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         result = actions[0].execute(Path(file))
         assert not file.exists()
         assert (source_dir / "report_test.txt").exists()
@@ -248,7 +248,7 @@ class TestReplaceTextActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_replace_text_action_wrong_value_new_str(self):
         """Verify an error is thrown when trying to read a replace text action with a wrongly typed new_str"""
@@ -260,7 +260,7 @@ class TestReplaceTextActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_replace_text_action_wrong_value_first_instance_only(self):
         """Verify an error is thrown when trying to read a replace text action with a wrongly typed first_instance_only"""
@@ -272,7 +272,7 @@ class TestReplaceTextActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_replace_text_action_empty_old_str(self):
         """Verify an error is thrown when trying to read a replace text action with an empty old_str"""
@@ -284,7 +284,7 @@ class TestReplaceTextActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
 class TestChangeExtensionActionConfigLoader:
     def test_change_extension_action_created(self, tmp_path):
@@ -299,7 +299,7 @@ class TestChangeExtensionActionConfigLoader:
             "new_ext": "md",
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         result = actions[0].execute(Path(file))
         assert not file.exists()
         assert (source_dir / "test.md").exists()
@@ -312,7 +312,7 @@ class TestChangeExtensionActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_change_extension_action_wrongly_typed_new_ext(self):
         """Verify an error is thrown when trying to read a change extension action with a wrongly typed new_ext"""
@@ -322,7 +322,7 @@ class TestChangeExtensionActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_change_extension_action_empty_new_ext(self):
         """Verify an error is thrown when trying to read a change extension action with an empty new_ext"""
@@ -332,7 +332,7 @@ class TestChangeExtensionActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_change_extension_action_only_a_dot_new_ext(self):
         """Verify an error is thrown when trying to read a change extension action with a new_ext thats only a ."""
@@ -342,7 +342,7 @@ class TestChangeExtensionActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
 class TestDeleteActionConfigLoader:
     def test_delete_action_created_trash_bin(self, tmp_path):
@@ -357,7 +357,7 @@ class TestDeleteActionConfigLoader:
             "trash_bin": True,
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         assert isinstance(actions[0], DeleteAction)
         assert actions[0].trash_bin is True
 
@@ -373,7 +373,7 @@ class TestDeleteActionConfigLoader:
             "trash_bin": False,
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         assert isinstance(actions[0], DeleteAction)
         assert actions[0].trash_bin is False
 
@@ -384,7 +384,7 @@ class TestDeleteActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_delete_action_wrongly_typed_trash_bin(self):
         """Verify an error is thrown when trying to read a delete action with a wrongly typed trash_bin"""
@@ -394,7 +394,7 @@ class TestDeleteActionConfigLoader:
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
 class TestCompressActionConfigLoader:
     def test_compress_action(self, tmp_path):
@@ -402,7 +402,7 @@ class TestCompressActionConfigLoader:
             "type": "compress",
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         assert isinstance(actions[0], CompressAction)
 
 class TestExecuteScriptActionConfigLoader:
@@ -430,7 +430,7 @@ input_path.with_name("script_ran.txt").write_text("worked")
             "script_type": "python"
         }
 
-        actions = make_actions_from_json([actions_data])
+        actions = make_actions_from_json([actions_data], "test_rule")
         new_file = source_dir / "script_ran.txt"
 
         result =  actions[0].execute(Path(file))
@@ -448,7 +448,7 @@ input_path.with_name("script_ran.txt").write_text("worked")
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_execute_script_action_wrongly_typed_source(self, tmp_path):
         """Verify an error is thrown when trying to read an execute script action with a wrongly typed source"""
@@ -458,7 +458,7 @@ input_path.with_name("script_ran.txt").write_text("worked")
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_execute_script_action_wrongly_typed_script_type(self, tmp_path):
         """Verify an error is thrown when trying to read an execute script action with a wrongly typed script type"""
@@ -469,7 +469,7 @@ input_path.with_name("script_ran.txt").write_text("worked")
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")
 
     def test_execute_script_action_unknown_script_type(self, tmp_path):
         """Verify an error is thrown when trying to read an execute script action with an unknown script type"""
@@ -480,4 +480,4 @@ input_path.with_name("script_ran.txt").write_text("worked")
         }
 
         with pytest.raises(ValueError):
-            make_actions_from_json([actions_data])
+            make_actions_from_json([actions_data], "test_rule")

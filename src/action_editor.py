@@ -99,7 +99,6 @@ class ActionsEditor(QWidget):
         self.actions_frame.adjustSize()
         self.adjustSize()
         self.updateGeometry()
-        self.window().adjustSize()
 
     def build_actions(self):
         if len(self.action_editors) == 0:
@@ -208,7 +207,11 @@ class ActionEditor(QWidget):
         current_page = self.stack.currentWidget()
 
         if current_page is not None:
-            self.stack.setFixedHeight(current_page.sizeHint().height())
+            height = current_page.sizeHint().height()
+            if height < 0:
+                height = 0
+
+            self.stack.setFixedHeight(height)
 
         self.updateGeometry()
 

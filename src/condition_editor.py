@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QPushButton,
     QFrame,
+    QSizePolicy,
 )
 from PySide6.QtWidgets import QSizePolicy
 from PySide6.QtCore import Qt
@@ -29,6 +30,10 @@ class ConditionEditor(QWidget):
     def __init__(self, condition=None, depth=0, parent=None):
         super().__init__(parent)
         self.depth = depth
+        self.setSizePolicy(
+            QSizePolicy.Policy.Preferred,
+            QSizePolicy.Policy.Maximum
+        )
 
         layout = QVBoxLayout(self)
         indent = min(self.depth * 12, 48)
@@ -73,13 +78,11 @@ class ConditionEditor(QWidget):
         self.stack.addWidget(self.name_matches_page)
         self.stack.addWidget(self.and_page)
         self.stack.addWidget(self.or_page)
-
-        self.type_input.currentIndexChanged.connect(
-            self.change_condition_type
-        )
+        self.type_input.currentIndexChanged.connect(self.on_condition_type_changed)
 
         if condition is not None:
             self.load_condition(condition)
+        self.on_condition_type_changed(self.type_input.currentIndex())
 
     def build_condition(self):
         page = self.stack.currentWidget()
@@ -121,10 +124,28 @@ class ConditionEditor(QWidget):
         else:
             raise ValueError(f"Unsupported condition type: {type(condition).__name__}")
 
-    def change_condition_type(self, index):
+    def on_condition_type_changed(self, index):
         self.stack.setCurrentIndex(index)
+        current_page = self.stack.currentWidget()
+
+        if current_page is not None:
+            # AND and OR have more variable heights than the rest, so catch these cases
+            if self.type_input.currentText() in ("AND", "OR"):
+                self.stack.setMinimumHeight(0)
+                self.stack.setMaximumHeight(16777215)
+
+                current_page.adjustSize()
+                self.stack.adjustSize()
+            else:
+                height = current_page.sizeHint().height()
+                if height < 0:
+                    height = 0
+
+                self.stack.setFixedHeight(height)
+
         self.type_input.clearFocus()
         self.setFocus()
+        self.updateGeometry()
 
 class ConditionPage(QWidget):
     """A widget that displays ui for the creation or modification of a certain condition"""
@@ -140,6 +161,7 @@ class ExtensionConditionPage(ConditionPage):
         super().__init__(parent)
 
         layout = QFormLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.extension_input = QLineEdit()
         self.extension_input.setPlaceholderText(".txt")
@@ -168,6 +190,7 @@ class NameContainsConditionPage(ConditionPage):
         super().__init__(parent)
 
         layout = QFormLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.text_input = QLineEdit()
 
@@ -207,6 +230,7 @@ class SizeConditionPage(ConditionPage):
         super().__init__(parent)
 
         layout = QFormLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.comparison_input = QComboBox()
         self.comparison_input.addItems([
@@ -272,6 +296,7 @@ class NameStartsWithConditionPage(ConditionPage):
         super().__init__(parent)
 
         layout = QFormLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.text_input = QLineEdit()
 
@@ -312,6 +337,7 @@ class NameEndsWithConditionPage(ConditionPage):
         super().__init__(parent)
 
         layout = QFormLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.text_input = QLineEdit()
 
@@ -352,6 +378,7 @@ class ExactNameConditionPage(ConditionPage):
         super().__init__(parent)
 
         layout = QFormLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.text_input = QLineEdit()
 
