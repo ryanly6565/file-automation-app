@@ -2,6 +2,7 @@ from pathlib import Path
 
 from src.conditions import Condition
 from src.actions import Action, ActionResult
+from collections import defaultdict
 from typing import Callable
 
 class Rule:
@@ -42,4 +43,9 @@ class Rule:
                 on_action_complete(result)
         return ActionResult(current_path=curr_path, generated_paths=generated_paths)
 
-    
+def group_rules_by_folder(rules: list[Rule]):
+    """Given a list of rules, converts them into a dict with the watch_folder as the key"""
+    rules_by_folder = defaultdict(list)
+    for rule in rules:
+        rules_by_folder[rule.watch_folder].append(rule)
+    return rules_by_folder

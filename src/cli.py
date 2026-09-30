@@ -5,7 +5,7 @@ from watchdog.observers import Observer
 
 from src.config_loader import load_rules
 from src.history import HistoryStore
-from src.ui import group_rules_by_folder
+from src.rules import group_rules_by_folder
 from src.watcher import WatcherHandler
 from src.apps_path import HISTORY_PATH
 from pathlib import Path

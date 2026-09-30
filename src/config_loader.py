@@ -34,7 +34,7 @@ def load_rules(file_path: str) -> list[Rule]:
         if not isinstance(enabled, bool):
             raise ValueError("Rule enabled field must be a bool")
         recursive = curr_rule.get("recursive", False)
-        if not isinstance(enabled, bool):
+        if not isinstance(recursive, bool):
             raise ValueError("Recursive field must be a bool")
 
         condition = make_condition_from_json(curr_rule["condition"], rule_name)

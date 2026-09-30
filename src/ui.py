@@ -22,13 +22,13 @@ from src.history_panel import HistoryPanel
 from src.rule_editor import RuleEditorDialog
 from pathlib import Path
 from src.watcher import WatcherHandler
-from collections import defaultdict
 from src.config_loader import load_rules, save_rules, rule_to_json
 from src.rules import Rule
 from src.conditions import ExtensionCondition, OrCondition, SizeCondition
 from src.actions import CopyAction
 from src.rule_validation import validate_rule
 from src.apps_path import RULES_PATH, HISTORY_PATH
+from src.rules import group_rules_by_folder
 from threading import Lock
 import sys
 import copy
@@ -801,13 +801,6 @@ def move_rule_helper(rules, rule, direction):
     rule_to_swap_with_index = rules.index(rule_to_swap_with)
     old_index = rules.index(rule)
     rules[old_index], rules[rule_to_swap_with_index] = (rules[rule_to_swap_with_index], rules[old_index])
-    
-def group_rules_by_folder(rules: list[Rule]):
-    """Given a list of rules, converts them into a dict with the watch_folder as the key"""
-    rules_by_folder = defaultdict(list)
-    for rule in rules:
-        rules_by_folder[rule.watch_folder].append(rule)
-    return rules_by_folder
 
 def find_matching_rule(rules, path):
     """Given a list of rules and a path, find the first rule to match the path"""
