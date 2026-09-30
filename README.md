@@ -136,6 +136,8 @@ Upon successful activation, your terminal should look something like:
 (.venv)
 ```
 
+Note that for future example commands, whether you should use Python or Python3 depends on what your system has installed.
+
 ### Install Dependencies
 
 To install the required Python packages:
@@ -157,11 +159,7 @@ python3 -m src.ui
 ```
 This should open the graphical interface and allow rule creation/execution.
 
-# Windows Build
-
-File Automation App can also be packaged as a Windows application using PyInstaller. In other words, it can be turned into an executable file that can run without having to manually use Python.
-
-### Build the Application
+# Linux Build
 
 Run the following command from the project root to create a Linux packaged version:
 ```bash
@@ -177,6 +175,12 @@ Then use it with:
 ```bash
 ./dist-linux/FileAutomationApp/FileAutomationApp
 ```
+
+# Windows Build
+
+File Automation App can also be packaged as a Windows application using PyInstaller. In other words, it can be turned into an executable file that can run without having to manually use Python.
+
+### Build the Application
 
 Run the following command from the project root to create the Windows executable:
 
@@ -227,13 +231,21 @@ An example section of a rule configuration may look like:
 
 ```json
 {
-  "folder": "Downloads",
+  "name": "Organize PDFs",
+  "watch_folder": "Downloads",
   "enabled": true,
   "recursive": false,
   "condition": {
     "type": "extension",
-    "extension": ".pdf"
-  }
+    "value": ".pdf"
+  },
+  "actions": [
+    {
+      "type": "move",
+      "destination": "Documents/PDFs",
+      "collision_policy": "rename"
+    }
+  ]
 }
 ```
 
@@ -253,11 +265,17 @@ file-automation-app/
 │   ├── config_loader.py
 │   └── history.py
 ├── tests/
-├── assets/
-├── config/
-├── history/
+├── docs/
+├── packaging/
+│   ├── FileAutomationApp.linux.spec
+│   ├── FileAutomationApp.windows.spec
+│   └── assets/
+│       └── app.ico
+├── scripts/
 ├── README.md
-└── requirements.txt
+├── LICENSE
+├── requirements.txt
+└── requirements_dev.txt
 ```
 
 Automation logic is kept separate from user interfaces.
