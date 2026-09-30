@@ -505,6 +505,7 @@ echo -n "worked" > "$dir/script_ran.txt"
         assert (tmp_path / "script_ran.txt").exists()
         assert (tmp_path / "script_ran.txt").read_text() == "worked"
 
+    @pytest.mark.skipif(sys.platform == "win32", reason="Bash execution test requires a POSIX-style Bash environment")
     def test_execute_script_action_missing_bash_script(self, tmp_path):
         """Verify that execute script errors if the Bash script is missing."""
         input_file = tmp_path / "input.txt"
@@ -516,6 +517,7 @@ echo -n "worked" > "$dir/script_ran.txt"
         with pytest.raises(FileNotFoundError):
             action.execute(input_file)
 
+    @pytest.mark.skipif(sys.platform == "win32", reason="Bash execution test requires a POSIX-style Bash environment")
     def test_execute_script_action_wrong_bash_extension(self, tmp_path):
         """Verify that Bash rejects an unsupported script extension."""
         script = tmp_path / "test_script.py"
@@ -523,101 +525,7 @@ echo -n "worked" > "$dir/script_ran.txt"
         with pytest.raises(ValueError):
             ExecuteScriptAction(script, script_type="bash")
 
-    def test_execute_script_bash_script_has_error(self, tmp_path):
-        """Verify that execute script propagates an error when the Bash script fails."""
-        input_file = tmp_path / "input.txt"
-        input_file.write_text("hello")
-
-        script = tmp_path / "test_script.sh"
-        script.write_text(
-"""#!/usr/bin/env bash
-
-exit 1
-"""
-        )
-
-        action = ExecuteScriptAction(script, script_type="bash")
-
-        with pytest.raises(subprocess.CalledProcessError):
-            action.execute(input_file)
-
-    def test_execute_script_bash_script_is_directory(self, tmp_path):
-        """Verify that execute script errors if the Bash script path is actually a directory."""
-        script = tmp_path / "test_script.sh"
-        script.mkdir()
-
-        input_file = tmp_path / "input.txt"
-        input_file.write_text("hello")
-
-        action = ExecuteScriptAction(script, script_type="bash")
-
-        with pytest.raises(FileNotFoundError):
-            action.execute(input_file)
-
-    def test_execute_script_action_runs_bash_script(self, tmp_path):
-        """Verify that execute script successfully executes a Bash script."""
-        input_file = tmp_path / "input.txt"
-        input_file.write_text("hello")
-
-        script = tmp_path / "test_script.sh"
-        script.write_text(
-"""#!/usr/bin/env bash
-
-input_path="$1"
-dir="$(dirname "$input_path")"
-echo -n "worked" > "$dir/script_ran.txt"
-"""
-    )
-
-        action = ExecuteScriptAction(script, script_type="bash")
-        result = action.execute(input_file)
-
-        assert result.current_path == input_file
-        assert result.generated_paths == []
-        assert (tmp_path / "script_ran.txt").exists()
-        assert (tmp_path / "script_ran.txt").read_text() == "worked"
-
-    def test_execute_script_action_runs_extensionless_bash_script(self, tmp_path):
-        """Verify that execute script successfully executes a Bash script with no extension."""
-        input_file = tmp_path / "input.txt"
-        input_file.write_text("hello")
-
-        script = tmp_path / "test_script"
-        script.write_text(
-"""#!/usr/bin/env bash
-
-input_path="$1"
-dir="$(dirname "$input_path")"
-echo -n "worked" > "$dir/script_ran.txt"
-"""
-        )
-
-        action = ExecuteScriptAction(script, script_type="bash")
-        result = action.execute(input_file)
-
-        assert result.current_path == input_file
-        assert result.generated_paths == []
-        assert (tmp_path / "script_ran.txt").exists()
-        assert (tmp_path / "script_ran.txt").read_text() == "worked"
-
-    def test_execute_script_action_missing_bash_script(self, tmp_path):
-        """Verify that execute script errors if the Bash script is missing."""
-        input_file = tmp_path / "input.txt"
-        input_file.write_text("hello")
-
-        script = tmp_path / "test_script.sh"
-        action = ExecuteScriptAction(script, script_type="bash")
-
-        with pytest.raises(FileNotFoundError):
-            action.execute(input_file)
-
-    def test_execute_script_action_wrong_bash_extension(self, tmp_path):
-        """Verify that Bash rejects an unsupported script extension."""
-        script = tmp_path / "test_script.py"
-
-        with pytest.raises(ValueError):
-            ExecuteScriptAction(script, script_type="bash")
-
+    @pytest.mark.skipif(sys.platform == "win32", reason="Bash execution test requires a POSIX-style Bash environment")
     def test_execute_script_bash_script_has_error(self, tmp_path):
         """Verify that execute script propagates an error when the Bash script fails."""
         input_file = tmp_path / "input.txt"
