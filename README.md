@@ -107,9 +107,8 @@ This application requires the following Python dependencies:
 
 ### Clone the Repository
 
-> TODO: Replace the repository URL below after the GitHub repository is created.
 ```
-git clone https://github.com/USERNAME/file-automation-app.git
+git clone https://github.com/ryanly6565/file-automation-app.git
 cd file-automation-app
 ```
 
@@ -145,6 +144,12 @@ To install the required Python packages:
 python3 -m pip install -r requirements.txt
 ```
 
+If you wish to test the application or package the application, install the dev dependencies:
+
+```bash
+python3 -m pip install -r requirements_dev.txt
+```
+
 ### Run the Application
 From the project root directory, run:
 ```bash
@@ -156,29 +161,32 @@ This should open the graphical interface and allow rule creation/execution.
 
 File Automation App can also be packaged as a Windows application using PyInstaller. In other words, it can be turned into an executable file that can run without having to manually use Python.
 
-### Install PyInstaller
-
-Inside the Windows virtual environment:
-
-```powershell
-python -m pip install pyinstaller
-```
-
 ### Build the Application
 
-Run the following command from the project root to create the executable:
+Run the following command from the project root to create a Linux packaged version:
+```bash
+python3 -m PyInstaller \
+  --clean \
+  --noconfirm \
+  --distpath dist-linux \
+  --workpath build-linux \
+  packaging/FileAutomationApp.linux.spec
+```
+
+Then use it with:
+```bash
+./dist-linux/FileAutomationApp/FileAutomationApp
+```
+
+Run the following command from the project root to create the Windows executable:
 
 ```powershell
-pyinstaller `
+python -m PyInstaller `
   --clean `
   --noconfirm `
-  --name FileAutomationApp `
-  --windowed `
-  --icon=assets\app.ico `
-  --add-data "assets\app.ico;assets" `
   --distpath dist-windows `
   --workpath build-windows `
-  src\ui.py
+  packaging\FileAutomationApp.windows.spec
 ```
 
 This will generate the executable file at:
@@ -196,7 +204,7 @@ File Automation App can also be run through a command-line interface without a G
 Run the CLI from the project root with:
 
 ```bash
-python3 -m src.cli
+python3 -m src.cli <rules.json>
 ```
 
 The CLI is intended to be used for running the automation automatically and without the GUI. 
@@ -278,7 +286,7 @@ If a filesystem event alerts the watchers of overlapping folders (i.e. a folder 
 
 ## Testing
 The project uses pytest for unit and integration testing. To test the application, run:
-python -m pytest -v
+python3 -m pytest -v
 
 Tests cover:
 - individual conditions
@@ -319,7 +327,7 @@ Delete actions are required to be the final action in a rule's action chain. Thi
 ## Limitations
 - External script actions require the corresponding runtime to be installed.
 - JavaScript scripts require Node.js.
-- PowerShell scripts require PowerShell (`pwsh`).
+- PowerShell scripts require a PowerShell runtime. On Windows, `powershell.exe` is supported. On Linux `pwsh` is supported.
 - Bash scripts require a Bash environment.
 - Filesystem behavior may vary slightly between operating systems.
 

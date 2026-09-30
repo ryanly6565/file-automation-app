@@ -16,7 +16,15 @@ def main():
     if len(sys.argv) != 2:
         print("Usage: python -m src.cli <rules.json>")
         return
-    rules_file = sys.argv[1]
+    rules_file = Path(sys.argv[1])
+
+    if not rules_file.exists():
+        print(f"Rules file does not exist: {rules_file}")
+        return
+
+    if not rules_file.is_file():
+        print(f"Rules path is not a file: {rules_file}")
+        return
 
     # try to load user rules
     try:
