@@ -2,6 +2,8 @@ from pathlib import Path
 from src.actions import *
 import pytest
 import subprocess
+import sys
+import pytest
 
 class TestMoveAction:
     def test_move_action_moves_file(self, tmp_path):
@@ -455,6 +457,7 @@ input_path.with_name("script_ran.txt").write_text("worked")
             with pytest.raises(ValueError):
                 ExecuteScriptAction(script, script_type="unknown")
 
+    @pytest.mark.skipif(sys.platform == "win32", reason="Bash execution test requires a POSIX-style Bash environment")
     def test_execute_script_action_runs_bash_script(self, tmp_path):
         """Verify that execute script successfully executes a Bash script."""
         input_file = tmp_path / "input.txt"
@@ -478,6 +481,7 @@ echo -n "worked" > "$dir/script_ran.txt"
         assert (tmp_path / "script_ran.txt").exists()
         assert (tmp_path / "script_ran.txt").read_text() == "worked"
 
+    @pytest.mark.skipif(sys.platform == "win32", reason="Bash execution test requires a POSIX-style Bash environment")
     def test_execute_script_action_runs_extensionless_bash_script(self, tmp_path):
         """Verify that execute script successfully executes a Bash script with no extension."""
         input_file = tmp_path / "input.txt"
@@ -793,7 +797,8 @@ fs.writeFileSync(path.join(dir, "script_ran.txt"), "worked");
         monkeypatch.setattr("src.actions.subprocess.run", fake_run)
         action = ExecuteScriptAction(script, script_type="powershell")
         result = action.execute(input_file)
-        assert called["command"] == ["pwsh", str(script), str(input_file),]
+        assert called["command"] == ["pwsh", str(script), str(input_file),] or \
+               called["command"] == ["powershell.exe", str(script), str(input_file),]
         assert called["check"] is True
         assert result.current_path == input_file
         assert result.generated_paths == []
