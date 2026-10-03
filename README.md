@@ -90,9 +90,10 @@ Any attempts at processing a file are recorded in a history log. Each attempt cr
 
 ## Filesystem Safety
 Due to the nature of this application, there are safety measures in place to avoid dangerous operations:
-      - Several folders that all move a file between each other in an endless loop.
-      - A copy or compression action creating an additional file in the same folder, which endlessly creates more and more copies/compresses.
-      - An intermediate operation like a rename triggers an additional rule to execute on the file, creating a race condition to see which edits the file first.
+
+- Several folders that all move a file between each other in an endless loop.
+- A copy or compression action creating an additional file in the same folder, which endlessly creates more and more copies/compresses.
+- An intermediate operation like a rename triggers an additional rule to execute on the file, creating a race condition to see which edits the file first.
       
 To preserve file safety, File Automation App keeps track of all recently processed file paths and puts these paths on cooldown, prohibiting any further rules from being executed on them until the cooldown finishes.
 
